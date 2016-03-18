@@ -27,8 +27,16 @@ exports.start = () => {
 
   // middlewares setup
   middlewares.setup(app);
+
+  var apiApp = express();
   // routes config
-  routes.setup(app, controllers);
+  routes.setup(apiApp, controllers);
+  app.use('/api', apiApp);
+
+  var webApp = express();
+  webApp.use('/', express.static('www'));
+
+  app.use('/web', webApp);
 
   app.use(function(req, res) {
     var response = res.getCurrentResponse();
