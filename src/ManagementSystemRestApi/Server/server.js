@@ -4,7 +4,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
-var cors = require('cors')
+var cors = require('cors');
 
 // Application modules
 var controllers = require('../controllers/controllers-config');

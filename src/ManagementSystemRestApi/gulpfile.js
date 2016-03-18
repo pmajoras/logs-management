@@ -1,24 +1,34 @@
 "use strict";
 
-var jshint = require('gulp-jshint');
+var eslint = require('gulp-eslint');
 var gulp = require('gulp');
+var autoprefixer = require('gulp-autoprefixer');
+var sass = require('gulp-sass');
 
 var paths = {
-  scripts: ['**/*.js', '!node_modules/**/*.js', '!typings/*.ts'],
+  scripts: ['**/*.js', '!www/client.min.js', '!node_modules/**/*.js', '!typings/*.ts'],
 };
 
-gulp.task('jshint', function () {
+gulp.task('eslint', function() {
   return gulp.src(paths.scripts)
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'));
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
 });
 
-// Rerun the task when a file changes
-gulp.task('watch', function () {
-  gulp.watch(paths.scripts, ['jshint']);
+///////////
+// Tasks //
+///////////
+
+gulp.task('styles', function() {
+  gulp.task('sass', function() {
+    return gulp.src('./www/css/main.scss')
+      .pipe(sass().on('error', sass.logError))
+      .pipe(gulp.dest('./www/css/main.css'));
+  });
 });
 
 // Builds the application
-gulp.task('build', ['jshint']);
+gulp.task('build', ['eslint']);
 
 gulp.task('default', ['build']);
