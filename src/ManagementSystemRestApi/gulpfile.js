@@ -6,7 +6,11 @@ var autoprefixer = require('gulp-autoprefixer');
 var sass = require('gulp-sass');
 
 var paths = {
-  scripts: ['**/*.js', '!www/client.min.js', '!node_modules/**/*.js', '!typings/*.ts'],
+  scripts: ['**/*.js',
+    '!bower_components/**/*.js',
+    '!www/client.min.js',
+    '!node_modules/**/*.js',
+    '!typings/*.ts'],
 };
 
 gulp.task('eslint', function() {
@@ -19,16 +23,25 @@ gulp.task('eslint', function() {
 ///////////
 // Tasks //
 ///////////
-
-gulp.task('styles', function() {
-  gulp.task('sass', function() {
-    return gulp.src('./www/css/main.scss')
-      .pipe(sass().on('error', sass.logError))
-      .pipe(gulp.dest('./www/css/main.css'));
-  });
+gulp.task('sass', function() {
+  return gulp.src('./www/css/main.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions'],
+			cascade: false}
+      ))
+    .pipe(gulp.dest('./www/dist/'));
 });
 
+gulp.task('sass:vendors', function() {
+  return gulp.src('./www/css/vendors.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('./www/dist/'));
+});
+
+gulp.task('styles',['sass:vendors', 'sass']);
+
 // Builds the application
-gulp.task('build', ['eslint']);
+gulp.task('build', ['eslint', 'styles']);
 
 gulp.task('default', ['build']);

@@ -36,12 +36,12 @@ export default class Todos extends React.Component {
     const { todos } = this.state;
 
     const TodoComponents = todos.map((todo) => {
-        return <Todo key={todo.id} {...todo}/>;
+      return <Todo key={todo.id} {...todo}/>;
     });
 
     return (
       <div>
-        <button onClick={this.reloadTodos.bind(this)}>Reload!</button>
+        <button class="button button-3d button-primary button-rounded" onClick={this.reloadTodos.bind(this) }>Reload!</button>
         <h1>Todos</h1>
         <ul>{TodoComponents}</ul>
       </div>
