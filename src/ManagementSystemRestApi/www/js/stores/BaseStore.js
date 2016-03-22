@@ -9,12 +9,15 @@ class BaseStore extends EventEmitter {
   setState(newState) {
 
     this.state = newState;
-    console.log("newState", newState);
-    this.emit("change");
+    this.emitStateChanges("change");
   }
 
   getState() {
     return this.state;
+  }
+
+  emitStateChanges(eventName) {
+    this.emit(eventName, this.getState());
   }
 }
 

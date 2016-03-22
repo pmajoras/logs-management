@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Formsy from "formsy-react";
-import { Router, Route, IndexRoute, hashHistory } from "react-router";
+import { Router, Route, IndexRoute, browserHistory } from "react-router";
 
 import Favorites from "./pages/Favorites.jsx";
 import Todos from "./pages/Todos.jsx";
@@ -23,7 +23,7 @@ Formsy.addValidationRule('isRequired', function(values, value) {
 });
 
 ReactDOM.render(
-  <Router history={hashHistory}>
+  <Router history={browserHistory}>
     <Route path="/" component={Layout}>
       <IndexRoute component={Todos}></IndexRoute>
       <Route path="favorites" component={Favorites}></Route>

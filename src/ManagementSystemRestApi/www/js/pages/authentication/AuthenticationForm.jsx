@@ -1,6 +1,10 @@
 import React from "react";
 import FMUI from 'formsy-material-ui';
 import AppText from '../../components/common/AppText.jsx';
+import ServerError from '../../components/common/ServerError.jsx';
+import AuthenticationActions from "../../actions/authentication/AuthenticationActions";
+import AuthenticationStore from "../../stores/authentication/AuthenticationStore";
+import { browserHistory } from 'react-router';
 
 export default class AuthenticationForm extends React.Component {
     constructor(props) {
@@ -9,32 +13,59 @@ export default class AuthenticationForm extends React.Component {
         this.handleInvalid = this.handleInvalid.bind(this);
         this.submitForm = this.submitForm.bind(this);
 
-        this.errors = {
-            usernameErrors: {
-                isEmail: "O nome do usuário deve ser um e-mail",
-                isRequired: "O campo é obrigatório",
+        this.validation = {
+            username: {
+                errors: {
+                    isEmail: "O nome do usuário deve ser um e-mail",
+                    isRequired: "O campo é obrigatório",
+                },
+                rules: {
+                    isEmail: true,
+                    isRequired: true
+                }
             },
-            passwordErrors: {
-                minLength: "A senha deve ter no mínimo 6 caractéres.",
-                maxLength: "A senha deve ter no máximo 20 caractéres.",
-                isRequired: "O campo é obrigatório",
-            }
-        };
-        this.rules = {
-            usernameRules: {
-                isEmail: true,
-                isRequired: true
-            },
-            passwordRules: {
-                maxLength: 20,
-                minLength: 6,
-                isRequired: true
+            password: {
+                errors: {
+                    minLength: "A senha deve ter no mínimo 6 caractéres.",
+                    maxLength: "A senha deve ter no máximo 20 caractéres.",
+                    isRequired: "O campo é obrigatório",
+                },
+                rules: {
+                    maxLength: 20,
+                    minLength: 6,
+                    isRequired: true
+                }
             }
         };
 
         this.state = {
-            canSubmit: true
+            canSubmit: true,
+            serverErrors: []
         };
+    }
+
+    componentWillMount() {
+        AuthenticationStore.on("authenticationChanged", this.handleAuthenticationChange.bind(this));
+    }
+
+    componentWillUnmount() {
+        AuthenticationStore.removeListener("authenticationChanged", this.handleAuthenticationChange.bind(this));
+    }
+
+    handleAuthenticationChange(err, credentials) {
+        if (err) {
+            console.log("err", err);
+        }
+        else {
+            if (credentials.isAuthenticated) {
+                if (this.props.onAuthenticationSuccess && typeof this.props.onAuthenticationSuccess == 'function') {
+                    this.props.onAuthenticationSuccess(credentials);
+                }
+                else {
+                    browserHistory.push("favorites");
+                }
+            }
+        }
     }
 
     handleValid() {
@@ -51,13 +82,36 @@ export default class AuthenticationForm extends React.Component {
         }
     }
 
+    setServerErrors(newServerErrors) {
+        if (Array.isArray(newServerErrors)) {
+
+            this.setState({
+                serverErrors: newServerErrors
+            });
+
+            if (newServerErrorr.length > 0) {
+
+                if (this.props.onServerError && typeof this.props.onServerError == 'function') {
+                    this.props.onServerError(newServerErrors);
+                }
+            }
+        }
+    }
+
     submitForm(model) {
-        console.log("MOdel", model);
+        AuthenticationActions.authenticate(model);
     }
 
     render() {
-        let { usernameErrors, passwordErrors } = this.errors;
-        let { usernameRules, passwordRules } = this.rules;
+        let { username, password } = this.validation;
+        let {hideServerErrors} = this.props;
+        let errors = [];
+
+        if (!hideServerErrors) {
+            errors = this.state.serverErrors.map((error, index) => {
+                return <ServerError key={index} message={error}/>;
+            });
+        }
 
         return (
             <Formsy.Form
@@ -71,8 +125,8 @@ export default class AuthenticationForm extends React.Component {
                         type="email"
                         name="username"
                         floatingLabelText="Email(*)"
-                        validationErrors={usernameErrors}
-                        validations={usernameRules}/>
+                        validationErrors={username.errors}
+                        validations={username.rules}/>
                 </div>
                 <div class="form-group">
                     <AppText
@@ -81,8 +135,11 @@ export default class AuthenticationForm extends React.Component {
                         type="password"
                         name="password"
                         floatingLabelText="Senha(*)"
-                        validationErrors={passwordErrors}
-                        validations={passwordRules}/>
+                        validationErrors={password.errors}
+                        validations={password.rules}/>
+                </div>
+                <div class="form-group">
+                    {errors}
                 </div>
                 <button type="submit" disabled={!this.state.canSubmit} class="button button-full button-primary">Entrar</button>
             </Formsy.Form>

@@ -1,22 +1,33 @@
 const BaseStore = require('../BaseStore');
-const dispatcher = require("../dispatcher");
+const dispatcher = require("../../dispatcher").default;
+const authenticationActions = require("../../actions/authentication/AuthenticationActions");
 
 class AuthenticationStore extends BaseStore {
   constructor() {
-    super();
-    this.setState({
+    super({
       isAuthenticated: false,
       username: '',
       token: ''
     });
   }
 
+  handleAuthenticate(err, payload) {
+    console.log("sAuthStore", payload);
+    this.setState(payload);
+    this.emit("authenticationChanged", err, payload);
+  }
+
   handleActions(action) {
-    console.log("handlerACtions", action);
+    switch (action.type) {
+      case authenticationActions.actions.authenticate: {
+        this.handleAuthenticate(action.err, action.payload);
+      }
+    }
   }
 }
 
-const authenticationSTore = new AuthenticationStore();
-dispatcher.register(authenticationSTore.handleActions.bind(authenticationSTore));
+const authenticationStore = new AuthenticationStore();
+console.log("disp", dispatcher);
+dispatcher.register(authenticationStore.handleActions.bind(authenticationStore));
 
-module.exports = authenticationSTore;
+module.exports = authenticationStore;
