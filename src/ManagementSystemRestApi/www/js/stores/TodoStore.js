@@ -1,11 +1,10 @@
 import { EventEmitter } from "events";
-
 import dispatcher from "../dispatcher";
+const BaseStore = require('./BaseStore');
 
-class TodoStore extends EventEmitter {
+class TodoStore extends BaseStore {
   constructor() {
-    super();
-    this.todos = [
+    super([
       {
         id: 113464613,
         text: "Go Shopping",
@@ -16,23 +15,24 @@ class TodoStore extends EventEmitter {
         text: "Pay Water Bill",
         complete: false
       },
-    ];
+    ]);
   }
 
   createTodo(text) {
     const id = Date.now();
+    let todos = this.getState();
 
-    this.todos.push({
+    todos.push({
       id,
       text,
       complete: false,
     });
 
-    this.emit("change");
+    this.setState(todos);
   }
 
   getAll() {
-    return this.todos;
+    return this.getState();
   }
 
   handleActions(action) {
@@ -41,8 +41,7 @@ class TodoStore extends EventEmitter {
         this.createTodo(action.text);
       }
       case "RECEIVE_TODOS": {
-        this.todos = action.todos;
-        this.emit("change");
+        this.setState(action.todos);
       }
     }
   }

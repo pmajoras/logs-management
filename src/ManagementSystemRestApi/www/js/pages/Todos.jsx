@@ -1,6 +1,6 @@
 import React from "react";
 
-import Todo from "../components/Todo";
+import Todo from "../components/Todo.jsx";
 import * as TodoActions from "../actions/TodoActions";
 import TodoStore from "../stores/TodoStore";
 
