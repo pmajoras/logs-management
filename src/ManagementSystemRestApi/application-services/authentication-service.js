@@ -3,6 +3,7 @@ var UserService = require('../domain/services/users/user-service');
 var jwt = require('jsonwebtoken');
 var config = require('../config/config');
 var appConstants = require('../config/app-constants');
+var UserMustExistSpec = require('./specifications/authentication-service-specs/user-must-exist-spec');
 var Q = require('q');
 
 class AuthenticationService {
@@ -22,7 +23,7 @@ class AuthenticationService {
       .then((newEntity) => {
         // create a token
         let token = this._createToken(newEntity.username, newEntity._id);
-        deferred.resolve({ success: true, token: token, id: newEntity._id });
+        deferred.resolve({ token: token, id: newEntity._id });
       }, (err) => {
         deferred.reject(err);
       });
@@ -36,18 +37,15 @@ class AuthenticationService {
   authenticate(userViewModel) {
     let deferred = Q.defer();
 
-    this.userService.findOne({ username: userViewModel.username, password: userViewModel.password })
-      .then((user) => {
+    let userMustExistSpec = new UserMustExistSpec(this.userService);
 
-        if (user) {
-          // create a token
-          let token = this._createToken(user.username, user._id);
-          deferred.resolve({ success: true, token: token, id: user._id });
-        } else {
-          deferred.resolve({ success: false, message: 'Invalid username or password.' });
-        }
-      }, (error) => {
-        deferred.reject(error);
+    userMustExistSpec.isSatisfiedBy({ username: userViewModel.username, password: userViewModel.password })
+      .then((user) => {
+        // create a token
+        let token = this._createToken(user.username, user._id);
+        deferred.resolve({ token: token, id: user._id });
+      }, (err) => {
+        deferred.reject(err);
       });
 
     return deferred.promise;

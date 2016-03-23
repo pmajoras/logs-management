@@ -39,9 +39,9 @@ module.exports = {
         var errors = [];
 
         notSatisfiedSpecs.forEach((notSatisfiedSpec) => {
-          errors.push({ "code": notSatisfiedSpec.errorCode, "message": notSatisfiedSpec.notSatisfiedReason });
+          errors.push(notSatisfiedSpec.getError());
         });
-        
+
         deferred.resolve(errors.length > 0 ? specificationError(errors) : null);
       }, (err) => {
         deferred.reject(err);

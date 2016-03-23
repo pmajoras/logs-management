@@ -15,6 +15,10 @@ class SpecificationBase {
   isSatisfiedBy(target) {
     return Q(this.isSatisfiedFunction(target));
   }
+
+  getError() {
+    return { "code": this.errorCode, "message": this.notSatisfiedReason };
+  }
 }
 
 module.exports = SpecificationBase;
