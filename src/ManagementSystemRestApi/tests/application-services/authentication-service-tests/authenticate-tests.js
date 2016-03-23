@@ -12,7 +12,7 @@ before(function(done) {
 
   target.registerAndAuthenticate(validUser)
     .then((data) => {
-      assert.equal(data !== undefined, true);
+      assert.isOk(data);
       done();
     }, (err) => {
       done(err);
@@ -25,7 +25,7 @@ before(function(done) {
 it("should authenticate the user", function(done) {
   target.authenticate(validUser)
     .then((data) => {
-      assert.equal(data !== undefined, true);
+      assert.isOk(data);
       done();
     }, (err) => {
       done(err);
@@ -38,7 +38,7 @@ it("should authenticate the user", function(done) {
 it("should not authenticate invalid user", function(done) {
   target.authenticate(invalidUser)
     .then((data) => {
-      assert.equal(data !== undefined, false);
+      assert.isOk(data);
       done();
     }, (err) => {
       if (!err.message) {
