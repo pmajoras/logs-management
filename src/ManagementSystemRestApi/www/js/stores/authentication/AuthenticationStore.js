@@ -12,7 +12,6 @@ class AuthenticationStore extends BaseStore {
   }
 
   handleAuthenticate(err, payload) {
-    console.log("sAuthStore", payload);
     this.setState(payload);
     this.emit("authenticationChanged", err, payload);
   }

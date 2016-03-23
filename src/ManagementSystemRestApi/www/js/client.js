@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import Formsy from "formsy-react";
 import { Router, Route, IndexRoute, browserHistory } from "react-router";
 
-import Favorites from "./pages/Favorites.jsx";
+import Welcome from "./pages/Welcome.jsx";
 import Todos from "./pages/Todos.jsx";
 import Layout from "./pages/Layout.jsx";
 import Settings from "./pages/Settings.jsx";
@@ -26,7 +26,7 @@ ReactDOM.render(
   <Router history={browserHistory}>
     <Route path="/" component={Layout}>
       <IndexRoute component={Todos}></IndexRoute>
-      <Route path="favorites" component={Favorites}></Route>
+      <Route path="welcome" component={Welcome}></Route>
       <Route path="settings" component={Settings}></Route>
       <Route path="authentication" component={Authentication}></Route>
     </Route>
