@@ -5,6 +5,7 @@ var config = require('../config/config');
 var appConstants = require('../config/app-constants');
 var UserMustExistSpec = require('./specifications/authentication-service-specs/user-must-exist-spec');
 var Q = require('q');
+var moment = require('moment');
 
 class AuthenticationService {
   constructor() {
@@ -23,7 +24,7 @@ class AuthenticationService {
       .then((newEntity) => {
         // create a token
         let token = this._createToken(newEntity.username, newEntity._id);
-        deferred.resolve({ token: token, id: newEntity._id });
+        deferred.resolve({ token: token, id: newEntity._id, expiresAt: moment().add(1, "hour").format() });
       }, (err) => {
         deferred.reject(err);
       });
@@ -34,16 +35,16 @@ class AuthenticationService {
   /** 
    * 
   */
-  authenticate(userViewModel) {
+  authenticate(authenticateViewModel) {
     let deferred = Q.defer();
 
     let userMustExistSpec = new UserMustExistSpec(this.userService);
 
-    userMustExistSpec.isSatisfiedBy({ username: userViewModel.username, password: userViewModel.password })
+    userMustExistSpec.isSatisfiedBy(authenticateViewModel)
       .then((user) => {
         // create a token
         let token = this._createToken(user.username, user._id);
-        deferred.resolve({ token: token, id: user._id });
+        deferred.resolve({ token: token, id: user._id, expiresAt: moment().add(1, "hour").format() });
       }, (err) => {
         deferred.reject(err);
       });

@@ -4,7 +4,9 @@
   "dependencies": {
     "bootstrap": "^3.2.0",
     "localforage": "^1.4.0",
-    "Buttons": "^2.0.0"
+    "Buttons": "^2.0.0",
+    "jquery.rest": "jquery.rest#^1.0.2",
+    "font-awesome": "^4.5.0"
   },
   "appPath": "www",
   "moduleName": "logs-management-system-app",

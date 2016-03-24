@@ -7,7 +7,7 @@ config.secret = "testSecret";
 
 // Web Configurations
 config.web = {};
-config.web.port = process.env.PORT || 8080;
+config.web.port = process.env.PORT || 8085;
 
 // Log
 config.logs = {};

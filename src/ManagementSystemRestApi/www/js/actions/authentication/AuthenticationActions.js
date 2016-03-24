@@ -1,18 +1,21 @@
 import dispatcher from "../../dispatcher";
 import ActionResponse from "../ActionResponse";
+import AuthenticationService from "../../services/authentication/AuthenticationService";
 
-var authenticationActions = {
+var actions = {
   authenticate: "AUTHENTICATE_USER"
 };
 
 module.exports = {
-  actions: authenticationActions,
+  actions: actions,
   authenticate: function(authenticateModel) {
+    let service = new AuthenticationService();
 
-    dispatcher.dispatch(new ActionResponse(authenticationActions.authenticate, {
-      isAuthenticated: true,
-      username: authenticateModel.username,
-      token: 'TESTE_TOKEN'
-    }));
+    service.authenticate(authenticateModel)
+      .then((data) => {
+        dispatcher.dispatch(new ActionResponse(null, actions.authenticate, data));
+      }, (err) => {
+        dispatcher.dispatch(new ActionResponse(err, actions.authenticate));
+      });
   }
 };

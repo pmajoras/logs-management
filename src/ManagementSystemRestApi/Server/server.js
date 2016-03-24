@@ -33,10 +33,10 @@ exports.start = () => {
   routes.setup(apiApp, controllers);
   app.use('/api', apiApp);
 
-  var webApp = express();
-  webApp.use('/', express.static('www'));
+  //var webApp = express();
+  //webApp.use('/', express.static('www'));
 
-  app.use('/web', webApp);
+  app.use('/', express.static('www'));
 
   app.use(function(req, res) {
     var response = res.getCurrentResponse();
@@ -47,7 +47,7 @@ exports.start = () => {
   // middlewares errors setup
   middlewares.setupErrorHandlers(app);
 
-  let port = config.web.port || 8080;
+  let port = config.web.port || 8085;
   app.listen(port);
   console.log("Express server listening on port %d in %s mode", port, app.settings.env);
 };

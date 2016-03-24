@@ -6,6 +6,9 @@ import AuthenticationActions from "../../actions/authentication/AuthenticationAc
 import AuthenticationStore from "../../stores/authentication/AuthenticationStore";
 import { browserHistory } from 'react-router';
 
+const store = AuthenticationStore.AuthenticationStore;
+const storeEvents = AuthenticationStore.AuthenticationStoreEvents;
+
 export default class AuthenticationForm extends React.Component {
   constructor(props) {
     super(props);
@@ -40,38 +43,45 @@ export default class AuthenticationForm extends React.Component {
 
     this.state = {
       canSubmit: true,
-      serverErrors: []
+      serverErrors: [],
+      isSubmitting: false
     };
   }
 
   componentWillMount() {
-    AuthenticationStore.on("authenticationChanged", this.handleAuthenticationChange.bind(this));
+    store.on(storeEvents.authenticationSubmitted, this.handleAuthenticationSubmit.bind(this));
   }
 
   componentWillUnmount() {
-    AuthenticationStore.removeListener("authenticationChanged", this.handleAuthenticationChange.bind(this));
+    store.removeListener(storeEvents.authenticationSubmitted, this.handleAuthenticationSubmit.bind(this));
   }
 
-  handleAuthenticationChange(err, credentials) {
+  handleAuthenticationSubmit(err, data) {
+    this.setState({
+      isSubmitting: false,
+    });
+
     if (err) {
-      console.log("err", err);
+      this.setServerErrors(err.data);
     }
     else {
-      if (credentials.isAuthenticated) {
-        if (this.props.onAuthenticationSuccess && typeof this.props.onAuthenticationSuccess == 'function') {
-          this.props.onAuthenticationSuccess(credentials);
-        }
-        else {
-          browserHistory.push("welcome");
-        }
+
+      if (this.props.onAuthenticationSuccess && typeof this.props.onAuthenticationSuccess == 'function') {
+        this.props.onAuthenticationSuccess(data);
+      }
+      else {
+        browserHistory.push("welcome");
       }
     }
   }
 
   handleValid() {
-    this.setState({
-      canSubmit: true
-    });
+
+    if (!this.state.canSubmit) {
+      this.setState({
+        canSubmit: true
+      });
+    }
   }
 
   handleInvalid() {
@@ -83,22 +93,29 @@ export default class AuthenticationForm extends React.Component {
   }
 
   setServerErrors(newServerErrors) {
+    let errors = [];
     if (Array.isArray(newServerErrors)) {
 
-      this.setState({
-        serverErrors: newServerErrors
-      });
-
-      if (newServerErrorr.length > 0) {
-
-        if (this.props.onServerError && typeof this.props.onServerError == 'function') {
-          this.props.onServerError(newServerErrors);
-        }
+      if (this.props.onServerError && typeof this.props.onServerError == 'function') {
+        this.props.onServerError(newServerErrors);
       }
+      errors = newServerErrors.map(error => error.message);
     }
+    else {
+      errors.push("Ocorreu um erro durante a requisição, favor tentar novamente.");
+    }
+
+    this.setState({
+      serverErrors: errors
+    });
   }
 
   submitForm(model) {
+    this.setState({
+      isSubmitting: true,
+      serverErrors: []
+    });
+
     AuthenticationActions.authenticate(model);
   }
 
@@ -112,6 +129,8 @@ export default class AuthenticationForm extends React.Component {
         return <ServerError key={index} message={error}/>;
       });
     }
+
+    let submitButtonText = this.state.isSubmitting ? "Carregando..." : "Entrar";
 
     return (
       <Formsy.Form
@@ -141,7 +160,9 @@ export default class AuthenticationForm extends React.Component {
         <div class="form-group">
           {errors}
         </div>
-        <button type="submit" disabled={!this.state.canSubmit} class="button button-full button-primary">Entrar</button>
+        <button type="submit" disabled={!this.state.canSubmit && !this.state.isSubmitting} class="button button-full button-primary">
+          {submitButtonText}
+        </button>
       </Formsy.Form>
     );
   }

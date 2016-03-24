@@ -26,7 +26,6 @@ class BaseRepository {
     if (lean === true) {
       query = query.lean();
     }
-
     query = this._populate(query, populate);
     query.exec(function(err, entity) {
       defaultPromiseCallback(err, entity, deferred);

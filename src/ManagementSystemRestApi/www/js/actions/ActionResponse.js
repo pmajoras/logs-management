@@ -1,7 +1,7 @@
 
 class ActionResponse {
 
-  constructor(actionType, payload, error) {
+  constructor(error, actionType, payload) {
     this.type = actionType;
     this.payload = payload;
     this.err = error;

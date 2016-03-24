@@ -1,27 +1,29 @@
 import React from "react";
 import { IndexLink, Link } from "react-router";
-import AuthenticationStore from "../../stores/authentication/AuthenticationStore";
-
+import {AuthenticationStore, AuthenticationStoreEvents} from "../../stores/authentication/AuthenticationStore";
+import AuthenticationService from "../../services/authentication/AuthenticationService";
 export default class Nav extends React.Component {
   constructor() {
     super();
+    let authenticationService = new AuthenticationService();
+
     this.state = {
       collapsed: true,
-      isAuthenticated: false
+      isAuthenticated: authenticationService.isAuthenticated()
     };
   }
 
   componentWillMount() {
-    AuthenticationStore.on("authenticationChanged", this.handleAuthenticationChange.bind(this));
+    AuthenticationStore.on(AuthenticationStoreEvents.authenticationChanged, this.handleAuthenticationChange.bind(this));
   }
 
   componentWillUnmount() {
-    AuthenticationStore.removeListener("authenticationChanged", this.handleAuthenticationChange.bind(this));
+    AuthenticationStore.removeListener(AuthenticationStoreEvents.authenticationChanged, this.handleAuthenticationChange.bind(this));
   }
 
-  handleAuthenticationChange(err, credentials) {
+  handleAuthenticationChange(err, isAuthenticated) {
     if (!err) {
-      this.setState({ isAuthenticated: credentials.isAuthenticated });
+      this.setState({ isAuthenticated: isAuthenticated });
     }
   }
 
@@ -34,26 +36,30 @@ export default class Nav extends React.Component {
     const { location } = this.props;
     const { collapsed } = this.state;
     const featuredClass = location.pathname === "/" ? "active" : "";
-    const archivesClass = location.pathname.match(/^\/favorites/) ? "active" : "";
+    const welcomeClass = location.pathname.match(/^\/welcome/) ? "active" : "";
+    const searchClass = location.pathname.match(/^\/search/) ? "active" : "";
     const settingsClass = location.pathname.match(/^\/settings/) ? "active" : "";
     const loginClass = location.pathname.match(/^\/authentication/) ? "active" : "";
     const navClass = collapsed ? "collapse" : "";
     const isAuthenticated = this.state.isAuthenticated;
 
     let mustBeAuthenticatedLinks = [
-      <li class={archivesClass}>
+      <li key="1" class={welcomeClass}>
         <Link to="welcome" onClick={this.toggleCollapse.bind(this) }>Início</Link>
       </li>,
-      <li class={settingsClass}>
+      <li key="2" class={searchClass}>
+        <Link to="search" onClick={this.toggleCollapse.bind(this) }>Busca</Link>
+      </li>,
+      <li key="3" class={settingsClass}>
         <Link to="settings" onClick={this.toggleCollapse.bind(this) }>Settings</Link>
       </li>
     ];
 
     let mustNotBeAuthenticatedLinks = [
-      <li class={featuredClass}>
+      <li key="4" class={featuredClass}>
         <IndexLink to="/" onClick={this.toggleCollapse.bind(this) }>Todos</IndexLink>
       </li>,
-      <li class={loginClass}>
+      <li key="5" class={loginClass}>
         <Link to="authentication" onClick={this.toggleCollapse.bind(this) }>Login</Link>
       </li>
     ];

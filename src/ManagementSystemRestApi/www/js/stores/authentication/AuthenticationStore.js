@@ -1,19 +1,46 @@
 const BaseStore = require('../BaseStore');
 const dispatcher = require("../../dispatcher").default;
 const authenticationActions = require("../../actions/authentication/AuthenticationActions");
+const events = {
+  authenticationSubmitted: "EV_AUTHENTICATION_SUBMITTED",
+  authenticationChanged: "EV_AUTHENTICATION_CHANGED"
+};
 
 class AuthenticationStore extends BaseStore {
   constructor() {
     super({
       isAuthenticated: false,
       username: '',
-      token: ''
+      token: '',
+      id: ''
+    });
+  }
+
+  setState(newState) {
+    newState = newState || {};
+
+    super.setState({
+      isAuthenticated: newState.isAuthenticated,
+      username: newState.username,
+      token: newState.token,
+      id: newState.id
     });
   }
 
   handleAuthenticate(err, payload) {
-    this.setState(payload);
-    this.emit("authenticationChanged", err, payload);
+    payload = payload || {};
+    if (!err) {
+      payload.isAuthenticated = true;
+    }
+    else {
+      payload.isAuthenticated = false;
+    }
+
+    this.emit(events.authenticationSubmitted, err, payload);
+    if (this.state.isAuthenticated !== payload.isAuthenticated) {
+      this.setState(payload);
+      this.emit(events.authenticationChanged, null, this.state.isAuthenticated);
+    }
   }
 
   handleActions(action) {
@@ -26,7 +53,9 @@ class AuthenticationStore extends BaseStore {
 }
 
 const authenticationStore = new AuthenticationStore();
-console.log("disp", dispatcher);
 dispatcher.register(authenticationStore.handleActions.bind(authenticationStore));
 
-module.exports = authenticationStore;
+module.exports = {
+  AuthenticationStore: authenticationStore,
+  AuthenticationStoreEvents: events
+};

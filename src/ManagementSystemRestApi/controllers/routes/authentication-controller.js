@@ -24,7 +24,6 @@ class AuthenticationController extends BaseController {
   }
 
   authenticate(req, res, next) {
-    console.log(req.body);
     this.authenticationService.authenticate({ username: req.body.username, password: req.body.password })
       .then((data) => {
         res.setJsonResponse(data);
