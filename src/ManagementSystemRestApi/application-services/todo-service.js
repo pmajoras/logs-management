@@ -30,54 +30,24 @@ class TodoService {
 
   createBoard(boardViewModel) {
     let deferred = Q.defer();
+    let userMustExistWithIdSpec = new UserMustExistWithIdSpec(this._userService);
     let foundUser = null;
     let createdBoard = null;
 
-    let userWithIdMustExist = () => {
-      let userMustExistDeferred = Q.defer();
-      let userMustExistWithIdSpec = new UserMustExistWithIdSpec(this._userService);
-
-      userMustExistWithIdSpec.isSatisfiedBy(boardViewModel.userId)
-        .then((user) => {
-          foundUser = user;
-          userMustExistDeferred.resolve(user);
-        }, (err) => {
-          userMustExistDeferred.reject(err);
-        });
-
-      return userMustExistDeferred.promise;
+    let saveBoard = (user) => {
+      foundUser = user;
+      return this._boardService.save({ name: boardViewModel.name, description: boardViewModel.description, owner: foundUser._id });
     };
 
-    let saveBoard = () => {
-      let saveBoardDeferred = Q.defer();
-      this._boardService.save({ name: boardViewModel.name, description: boardViewModel.description, owner: foundUser._id })
-        .then((newBoard) => {
-          createdBoard = newBoard;
-          saveBoardDeferred.resolve(newBoard);
-        }, (err) => {
-          saveBoardDeferred.reject(err);
-        });
-
-      return saveBoardDeferred.promise;
-    };
-
-    let updateUserBoards = () => {
-      let saveUserDeferred = Q.defer();
+    let updateUser = (newBoard) => {
+      createdBoard = newBoard;
       foundUser.boards.push(createdBoard._id);
-
-      this._userService.save(foundUser)
-        .then(() => {
-          saveUserDeferred.resolve(foundUser);
-        }, (err) => {
-          saveUserDeferred.reject(err);
-        });
-
-      return saveUserDeferred.promise;
+      return this._userService.save(foundUser);
     };
 
-    Q.fcall(userWithIdMustExist)
+    userMustExistWithIdSpec.isSatisfiedBy(boardViewModel.userId)
       .then(saveBoard)
-      .then(updateUserBoards)
+      .then(updateUser)
       .then(() => {
         deferred.resolve(createdBoard);
       })
