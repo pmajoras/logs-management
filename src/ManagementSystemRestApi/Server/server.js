@@ -40,8 +40,14 @@ exports.start = () => {
 
   app.use(function(req, res) {
     var response = res.getCurrentResponse();
-    res.status(response.status).json(response.content);
-    res.end();
+    if (response.status && response.content) {
+      res.status(response.status).json(response.content);
+      res.end();
+    }
+    else {
+      res.status(404).json("Not Found");
+      res.end();
+    }
   });
 
   // middlewares errors setup
