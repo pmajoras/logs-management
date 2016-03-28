@@ -28,7 +28,7 @@ class TodoService {
     return deferred.promise;
   }
 
-  createBoard(boardViewModel) {
+  createBoard(userId, boardName, boardDescription) {
     let deferred = Q.defer();
     let userMustExistWithIdSpec = new UserMustExistWithIdSpec(this._userService);
     let foundUser = null;
@@ -36,7 +36,7 @@ class TodoService {
 
     let saveBoard = (user) => {
       foundUser = user;
-      return this._boardService.save({ name: boardViewModel.name, description: boardViewModel.description, owner: foundUser._id });
+      return this._boardService.save({ name: boardName, description: boardDescription, owner: foundUser._id });
     };
 
     let updateUser = (newBoard) => {
@@ -45,7 +45,7 @@ class TodoService {
       return this._userService.save(foundUser);
     };
 
-    userMustExistWithIdSpec.isSatisfiedBy(boardViewModel.userId)
+    userMustExistWithIdSpec.isSatisfiedBy(userId)
       .then(saveBoard)
       .then(updateUser)
       .then(() => {

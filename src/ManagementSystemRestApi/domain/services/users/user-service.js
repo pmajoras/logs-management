@@ -21,6 +21,14 @@ class UserService extends BaseDomainService {
     saveSpecifications.push(userSpecifications.getPasswordMustHaveSixOrMoreCharsSpec());
     return saveSpecifications;
   }
+
+  getUpdateSpecifications() {
+    let updateSpecifications = super.getUpdateSpecifications();
+
+    updateSpecifications.push(userSpecifications.getUsernameMustBeAnEmailSpec());
+    updateSpecifications.push(userSpecifications.getPasswordMustHaveSixOrMoreCharsSpec());
+    return updateSpecifications;
+  }
 }
 
 module.exports = UserService;

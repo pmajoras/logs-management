@@ -50,8 +50,8 @@ class BaseDomainService {
   */
   save(entity) {
     let deferred = Q.defer();
-
-    specService.getErrorFromNotSatisfiedSpecifications(this.getSaveSpecifications(), entity)
+    let specificationsToUse = entity._id ? this.getUpdateSpecifications() : this.getSaveSpecifications();
+    specService.getErrorFromNotSatisfiedSpecifications(specificationsToUse, entity)
       .then((notSatisfiedSpecsErrors) => {
         if (!notSatisfiedSpecsErrors) {
 
@@ -94,6 +94,13 @@ class BaseDomainService {
   * @returns {Array} - An array of the save specifications.
   */
   getSaveSpecifications() {
+    return [];
+  }
+
+  /**
+    * @returns {Array} - An array of the update specifications.
+    */
+  getUpdateSpecifications() {
     return [];
   }
 }

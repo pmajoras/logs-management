@@ -21,7 +21,7 @@ class TodoController extends BaseController {
   }
 
   createBoard(req, res, next) {
-    this.todoService.createBoard({ userId: req.params.id, name: req.body.name, description: req.body.description })
+    this.todoService.createBoard(req.params.id, req.body.name, req.body.description)
       .then((newBoard) => {
         res.setJsonResponse(newBoard);
         next();

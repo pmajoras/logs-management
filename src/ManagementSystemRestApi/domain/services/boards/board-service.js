@@ -16,6 +16,13 @@ class BoardService extends BaseDomainService {
     saveSpecifications.push(boardSpecifications.getBoardOwnerIsRequiredAndIsMongoIdSpec());
     return saveSpecifications;
   }
+
+  /**
+    * @returns {Array} - An array of the update specifications.
+    */
+  getUpdateSpecifications() {
+    return this.getSaveSpecifications();
+  }
 }
 
 module.exports = BoardService;
