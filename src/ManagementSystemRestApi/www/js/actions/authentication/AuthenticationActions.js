@@ -1,3 +1,4 @@
+"use strict";
 import dispatcher from "../../dispatcher";
 import ActionResponse from "../ActionResponse";
 import AuthenticationService from "../../services/authentication/AuthenticationService";

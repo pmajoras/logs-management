@@ -1,3 +1,4 @@
+"use strict";
 import { EventEmitter } from "events";
 
 class BaseStore extends EventEmitter {

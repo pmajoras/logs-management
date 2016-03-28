@@ -1,3 +1,4 @@
+"use strict";
 const BaseStore = require('../BaseStore');
 const dispatcher = require("../../dispatcher").default;
 const authenticationActions = require("../../actions/authentication/AuthenticationActions");

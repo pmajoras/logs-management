@@ -1,3 +1,4 @@
+"use strict";
 var $ = require("jquery");
 var AuthenticationService = require('../services/authentication/AuthenticationService');
 var authenticationService = new AuthenticationService();

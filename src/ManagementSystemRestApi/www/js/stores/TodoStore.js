@@ -1,3 +1,4 @@
+"use strict";
 import { EventEmitter } from "events";
 import dispatcher from "../dispatcher";
 const BaseStore = require('./BaseStore');

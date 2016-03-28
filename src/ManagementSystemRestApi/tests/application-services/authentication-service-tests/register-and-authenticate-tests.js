@@ -10,6 +10,7 @@ before(function() {
 });
 
 it("should register and authenticate the user", function(done) {
+  
   target.registerAndAuthenticate({ username: "teste@teste22.com", password: "123456" })
     .then((data) => {
       assert.isOk(data);

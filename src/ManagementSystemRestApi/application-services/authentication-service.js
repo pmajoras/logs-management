@@ -8,8 +8,8 @@ var Q = require('q');
 var moment = require('moment');
 
 class AuthenticationService {
-  constructor() {
-    this.userService = new UserService();
+  constructor(userService) {
+    this._userService = userService || new UserService();
   }
 
   _createToken(username, id) {
@@ -18,13 +18,17 @@ class AuthenticationService {
     });
   }
 
+  _createAuthenticationResponse(username, userId) {
+    // create a token
+    let token = this._createToken(username, userId);
+    return { token: token, id: userId, expiresAt: moment().add(1, "hour").format() };
+  }
+
   registerAndAuthenticate(userViewModel) {
     let deferred = Q.defer();
-    this.userService.save(userViewModel)
+    this._userService.save(userViewModel)
       .then((newEntity) => {
-        // create a token
-        let token = this._createToken(newEntity.username, newEntity._id);
-        deferred.resolve({ token: token, id: newEntity._id, expiresAt: moment().add(1, "hour").format() });
+        deferred.resolve(this._createAuthenticationResponse(newEntity.username, newEntity._id));
       }, (err) => {
         deferred.reject(err);
       });
@@ -38,13 +42,12 @@ class AuthenticationService {
   authenticate(authenticateViewModel) {
     let deferred = Q.defer();
 
-    let userMustExistSpec = new UserMustExistSpec(this.userService);
+    let userMustExistSpec = new UserMustExistSpec(this._userService);
 
     userMustExistSpec.isSatisfiedBy(authenticateViewModel)
       .then((user) => {
-        // create a token
-        let token = this._createToken(user.username, user._id);
-        deferred.resolve({ token: token, id: user._id, expiresAt: moment().add(1, "hour").format() });
+
+        deferred.resolve(this._createAuthenticationResponse(user.username, user._id));
       }, (err) => {
         deferred.reject(err);
       });

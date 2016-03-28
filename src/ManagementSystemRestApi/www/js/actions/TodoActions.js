@@ -1,3 +1,4 @@
+"use strict";
 import dispatcher from "../dispatcher";
 
 export function createTodo(text) {

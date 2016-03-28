@@ -1,4 +1,4 @@
-
+"use strict";
 class ActionResponse {
 
   constructor(error, actionType, payload) {

@@ -6,7 +6,7 @@ var Q = require('q');
 class UserMustExistSpec extends ApplicationServiceSpec {
   constructor(userService) {
     super((target) => {
-      console.log("target", target);
+
       if (target &&
         target.password &&
         typeof target.password == 'string' &&
@@ -28,8 +28,10 @@ class UserMustExistSpec extends ApplicationServiceSpec {
 
         return deferred.promise;
       }
+      else {
 
-      return Q.reject(this.getSpecificationError());
+        return Q.reject(this.getSpecificationError());
+      }
     });
 
     this.notSatisfiedReason = "Usuário ou senha inválidos.";
