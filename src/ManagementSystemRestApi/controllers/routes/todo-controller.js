@@ -19,9 +19,20 @@ class TodoController extends BaseController {
         next(err);
       });
   }
+
+  createBoard(req, res, next) {
+    this.todoService.createBoard({ userId: req.params.id, name: req.body.name, description: req.body.description })
+      .then((newBoard) => {
+        res.setJsonResponse(newBoard);
+        next();
+      }, (err) => {
+        next(err);
+      });
+  }
 }
 
 var routeFactory = new RouteFactory("/todo/:id/")
-  .get("boards", "getBoards", mustAuthorizeWithId);
+  .get("boards", "getBoards", mustAuthorizeWithId)
+  .post("boards", "createBoard", mustAuthorizeWithId);
 
 module.exports = { "Controller": TodoController, "routeFactory": routeFactory };
