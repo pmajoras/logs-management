@@ -12,8 +12,7 @@ describe("Prepare TodoService Tests", function() {
     });
   });
 
-  //importTest("register-and-authenticate-tests", __dirname + '/register-and-authenticate-tests');
-  //importTest("authenticate-tests", __dirname + '/authenticate-tests');
+  importTest("create-board-tests", __dirname + '/create-board-tests');
 
   after(function(done) {
     common.mongoose.unmock(function(err) {

@@ -41,12 +41,13 @@ class TodoService {
     let createdBoard = null;
 
     let saveBoard = (user) => {
-      foundUser = user;
+      foundUser = user.toObject();
       return this._boardService.save({ name: boardName, description: boardDescription, owner: foundUser._id });
     };
 
     let updateUser = (newBoard) => {
       createdBoard = newBoard;
+
       foundUser.boards.push(createdBoard._id);
       return this._userService.save(foundUser);
     };

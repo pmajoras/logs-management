@@ -3,7 +3,7 @@ var BaseRepository = require('../base-repository');
 
 class BoardRepository extends BaseRepository {
   constructor() {
-    super("user");
+    super("board");
   }
 }
 
