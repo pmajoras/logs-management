@@ -28,6 +28,12 @@ class TodoService {
     return deferred.promise;
   }
 
+  /**
+  * @param {Object} userId - The user id.
+  * @param {String} boardName - The board name.
+  * @param {String} boardDescription - The board description.
+  * @returns {Promise}
+  */
   createBoard(userId, boardName, boardDescription) {
     let deferred = Q.defer();
     let userMustExistWithIdSpec = new UserMustExistWithIdSpec(this._userService);
