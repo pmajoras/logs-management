@@ -38,7 +38,7 @@ export default class Nav extends React.Component {
     const { collapsed } = this.state;
     const featuredClass = location.pathname === "/" ? "active" : "";
     const welcomeClass = location.pathname.match(/^\/welcome/) ? "active" : "";
-    const searchClass = location.pathname.match(/^\/search/) ? "active" : "";
+    const todoClass = location.pathname.match(/^\/todo/) ? "active" : "";
     const settingsClass = location.pathname.match(/^\/settings/) ? "active" : "";
     const loginClass = location.pathname.match(/^\/authentication/) ? "active" : "";
     const navClass = collapsed ? "collapse" : "";
@@ -48,8 +48,8 @@ export default class Nav extends React.Component {
       <li key="1" class={welcomeClass}>
         <Link to="welcome" onClick={this.toggleCollapse.bind(this) }>Início</Link>
       </li>,
-      <li key="2" class={searchClass}>
-        <Link to="search" onClick={this.toggleCollapse.bind(this) }>Busca</Link>
+      <li key="2" class={todoClass}>
+        <Link to="todo/boards" onClick={this.toggleCollapse.bind(this) }>Todos</Link>
       </li>,
       <li key="3" class={settingsClass}>
         <Link to="settings" onClick={this.toggleCollapse.bind(this) }>Settings</Link>

@@ -23,6 +23,7 @@ class AuthenticationService extends BaseService {
 
         storageService.setItem("AUTH_TOKEN", data.token);
         storageService.setItem("AUTH_EXPIRES", data.expiresAt);
+        storageService.setItem("AUTH_USER_ID", data.id);
         deferred.resolve(data);
       }, (err) => {
         deferred.reject(err);
@@ -32,8 +33,11 @@ class AuthenticationService extends BaseService {
   }
 
   getAuthToken() {
-
     return this.isAuthenticated() ? storageService.getItem("AUTH_TOKEN") : null;
+  }
+
+  getUserId() {
+    return this.isAuthenticated() ? storageService.getItem("AUTH_USER_ID") : null;
   }
 
   isAuthenticated() {

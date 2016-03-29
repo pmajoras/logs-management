@@ -5,8 +5,8 @@ import Formsy from "formsy-react";
 import { Router, Route, IndexRoute, browserHistory } from "react-router";
 
 import Welcome from "./pages/Welcome.jsx";
-import Search from "./pages/search/Search.jsx";
-import Todos from "./pages/Todos.jsx";
+import Todo from "./pages/todo/Todo.jsx";
+import Boards from "./pages/todo/Boards.jsx";
 import Layout from "./pages/Layout.jsx";
 import Settings from "./pages/Settings.jsx";
 import Authentication from "./pages/authentication/Authentication.jsx";
@@ -32,7 +32,9 @@ ReactDOM.render(
     <Route path="/" component={Layout}>
       <IndexRoute component={Welcome}></IndexRoute>
       <Route path="welcome" component={Welcome}></Route>
-      <Route path="search" component={Search}></Route>
+      <Route path="todo" component={Todo}>
+        <Route path="boards" component={Boards}></Route>
+      </Route>
       <Route path="settings" component={Settings}></Route>
       <Route path="authentication" component={Authentication}></Route>
     </Route>

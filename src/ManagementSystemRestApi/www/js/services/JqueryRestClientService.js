@@ -13,8 +13,11 @@ var client = new $.RestClient('http://localhost:8085/api/', {
 
 client.add('authentication', { isSingle: true });
 client.authentication.add('authenticate', { isSingle: true });
+client.add('todo');
+client.todo.add("boards");
 
 module.exports = {
   client: client,
-  authentication: client.authentication
+  authentication: client.authentication,
+  boards: client.todo.boards
 };
