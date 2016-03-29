@@ -7,8 +7,8 @@ import AuthenticationActions from "../../actions/authentication/AuthenticationAc
 import AuthenticationStore from "../../stores/authentication/AuthenticationStore";
 import { browserHistory } from 'react-router';
 
-const store = AuthenticationStore.AuthenticationStore;
-const storeEvents = AuthenticationStore.AuthenticationStoreEvents;
+const store = AuthenticationStore;
+const storeEvents = AuthenticationStore.events;
 
 export default class AuthenticationForm extends React.Component {
   constructor(props) {
@@ -16,6 +16,7 @@ export default class AuthenticationForm extends React.Component {
     this.handleValid = this.handleValid.bind(this);
     this.handleInvalid = this.handleInvalid.bind(this);
     this.submitForm = this.submitForm.bind(this);
+    this.handleAuthenticationSubmit = this.handleAuthenticationSubmit.bind(this);
 
     this.validation = {
       username: {
@@ -50,11 +51,11 @@ export default class AuthenticationForm extends React.Component {
   }
 
   componentWillMount() {
-    store.on(storeEvents.authenticationSubmitted, this.handleAuthenticationSubmit.bind(this));
+    store.on(storeEvents.authenticationSubmitted, this.handleAuthenticationSubmit);
   }
 
   componentWillUnmount() {
-    store.removeListener(storeEvents.authenticationSubmitted, this.handleAuthenticationSubmit.bind(this));
+    store.removeListener(storeEvents.authenticationSubmitted, this.handleAuthenticationSubmit);
   }
 
   handleAuthenticationSubmit(err, data) {

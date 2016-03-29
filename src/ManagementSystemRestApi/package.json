@@ -35,6 +35,7 @@
     "morgan": "^1.6.1",
     "q": "^1.4.1",
     "react": "^0.14.6",
+    "react-bootstrap": "^0.28.4",
     "react-dom": "^0.14.6",
     "react-mixin": "^3.0.4",
     "react-router": "^2.0.1",

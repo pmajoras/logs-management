@@ -16,11 +16,8 @@ module.exports = {
 
     service.getBoards(authenticationService.getUserId())
       .then((data) => {
-        console.log("data", data);
         dispatcher.dispatch(new ActionResponse(null, actions.getBoards, data));
       }, (err) => {
-        console.log("err12312", err);
-
         dispatcher.dispatch(new ActionResponse(err, actions.getBoards));
       });
   }

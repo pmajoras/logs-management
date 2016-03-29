@@ -2,9 +2,10 @@
 import { EventEmitter } from "events";
 
 class BaseStore extends EventEmitter {
-  constructor(initialState) {
+  constructor(initialState, events) {
     super();
     this.state = initialState || {};
+    this.events = events || {};
   }
 
   setState(newState) {

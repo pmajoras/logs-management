@@ -1,7 +1,7 @@
 "use strict";
 import React from "react";
 import { IndexLink, Link } from "react-router";
-import {AuthenticationStore, AuthenticationStoreEvents} from "../../stores/authentication/AuthenticationStore";
+import AuthenticationStore from "../../stores/authentication/AuthenticationStore";
 import AuthenticationService from "../../services/authentication/AuthenticationService";
 export default class Nav extends React.Component {
   constructor() {
@@ -15,11 +15,11 @@ export default class Nav extends React.Component {
   }
 
   componentWillMount() {
-    AuthenticationStore.on(AuthenticationStoreEvents.authenticationChanged, this.handleAuthenticationChange.bind(this));
+    AuthenticationStore.on(AuthenticationStore.events.authenticationChanged, this.handleAuthenticationChange.bind(this));
   }
 
   componentWillUnmount() {
-    AuthenticationStore.removeListener(AuthenticationStoreEvents.authenticationChanged, this.handleAuthenticationChange.bind(this));
+    AuthenticationStore.removeListener(AuthenticationStore.events.authenticationChanged, this.handleAuthenticationChange.bind(this));
   }
 
   handleAuthenticationChange(err, isAuthenticated) {

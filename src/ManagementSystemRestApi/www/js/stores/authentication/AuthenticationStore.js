@@ -14,7 +14,7 @@ class AuthenticationStore extends BaseStore {
       username: '',
       token: '',
       id: ''
-    });
+    }, events);
   }
 
   setState(newState) {
@@ -37,10 +37,10 @@ class AuthenticationStore extends BaseStore {
       payload.isAuthenticated = false;
     }
 
-    this.emit(events.authenticationSubmitted, err, payload);
+    this.emit(this.events.authenticationSubmitted, err, payload);
     if (this.state.isAuthenticated !== payload.isAuthenticated) {
       this.setState(payload);
-      this.emit(events.authenticationChanged, null, this.state.isAuthenticated);
+      this.emit(this.events.authenticationChanged, null, this.state.isAuthenticated);
     }
   }
 
@@ -56,7 +56,4 @@ class AuthenticationStore extends BaseStore {
 const authenticationStore = new AuthenticationStore();
 dispatcher.register(authenticationStore.handleActions.bind(authenticationStore));
 
-module.exports = {
-  AuthenticationStore: authenticationStore,
-  AuthenticationStoreEvents: events
-};
+module.exports = authenticationStore;
