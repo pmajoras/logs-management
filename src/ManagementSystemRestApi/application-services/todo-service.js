@@ -17,10 +17,9 @@ class TodoService {
   getBoardsByUserId(id) {
     let deferred = Q.defer();
 
-    this._userService.findById(id, "boards", true)
-      .then((user) => {
-        let boards = user.boards || [];
-        deferred.resolve(boards);
+    this._boardService.findAll({ owner: id }, null, true)
+      .then((boards) => {
+        deferred.resolve(boards || []);
       }, (err) => {
         deferred.reject(err);
       });
@@ -38,25 +37,16 @@ class TodoService {
     let deferred = Q.defer();
     let userMustExistWithIdSpec = new UserMustExistWithIdSpec(this._userService);
     let foundUser = null;
-    let createdBoard = null;
 
     let saveBoard = (user) => {
       foundUser = user.toObject();
       return this._boardService.save({ name: boardName, description: boardDescription, owner: foundUser._id });
     };
 
-    let updateUser = (newBoard) => {
-      createdBoard = newBoard;
-
-      foundUser.boards.push(createdBoard._id);
-      return this._userService.save(foundUser);
-    };
-
     userMustExistWithIdSpec.isSatisfiedBy(userId)
       .then(saveBoard)
-      .then(updateUser)
-      .then(() => {
-        deferred.resolve(createdBoard);
+      .then((newBoard) => {
+        deferred.resolve(newBoard);
       })
       .catch((err) => {
         deferred.reject(err);

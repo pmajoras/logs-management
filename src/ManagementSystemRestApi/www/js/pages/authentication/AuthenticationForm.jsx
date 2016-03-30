@@ -1,11 +1,12 @@
 "use strict";
 import React from "react";
-import FMUI from 'formsy-material-ui';
 import AppText from '../../components/common/AppText.jsx';
-import ServerError from '../../components/common/ServerError.jsx';
 import AuthenticationActions from "../../actions/authentication/AuthenticationActions";
 import AuthenticationStore from "../../stores/authentication/AuthenticationStore";
 import { browserHistory } from 'react-router';
+import AppForm from '../../components/common/AppForm.jsx';
+import FormActions from '../../actions/common/FormActions';
+import moment from 'moment';
 
 const store = AuthenticationStore;
 const storeEvents = AuthenticationStore.events;
@@ -13,10 +14,8 @@ const storeEvents = AuthenticationStore.events;
 export default class AuthenticationForm extends React.Component {
   constructor(props) {
     super(props);
-    this.handleValid = this.handleValid.bind(this);
-    this.handleInvalid = this.handleInvalid.bind(this);
-    this.submitForm = this.submitForm.bind(this);
     this.handleAuthenticationSubmit = this.handleAuthenticationSubmit.bind(this);
+    this.formId = moment().format("YYYY:MM:DD:HH:mm:ss.ms");
 
     this.validation = {
       username: {
@@ -42,12 +41,6 @@ export default class AuthenticationForm extends React.Component {
         }
       }
     };
-
-    this.state = {
-      canSubmit: true,
-      serverErrors: [],
-      isSubmitting: false
-    };
   }
 
   componentWillMount() {
@@ -59,15 +52,8 @@ export default class AuthenticationForm extends React.Component {
   }
 
   handleAuthenticationSubmit(err, data) {
-    this.setState({
-      isSubmitting: false,
-    });
 
-    if (err) {
-      this.setServerErrors(err.data);
-    }
-    else {
-
+    if (!err) {
       if (this.props.onAuthenticationSuccess && typeof this.props.onAuthenticationSuccess == 'function') {
         this.props.onAuthenticationSuccess(data);
       }
@@ -75,70 +61,18 @@ export default class AuthenticationForm extends React.Component {
         browserHistory.push("welcome");
       }
     }
+    FormActions.handleFormSubmission(err.data || err, this.formId);
   }
 
-  handleValid() {
-
-    if (!this.state.canSubmit) {
-      this.setState({
-        canSubmit: true
-      });
-    }
-  }
-
-  handleInvalid() {
-    if (this.state.canSubmit) {
-      this.setState({
-        canSubmit: false
-      });
-    }
-  }
-
-  setServerErrors(newServerErrors) {
-    let errors = [];
-    if (Array.isArray(newServerErrors)) {
-
-      if (this.props.onServerError && typeof this.props.onServerError == 'function') {
-        this.props.onServerError(newServerErrors);
-      }
-      errors = newServerErrors.map(error => error.message);
-    }
-    else {
-      errors.push("Ocorreu um erro durante a requisição, favor tentar novamente.");
-    }
-
-    this.setState({
-      serverErrors: errors
-    });
-  }
-
-  submitForm(model) {
-    this.setState({
-      isSubmitting: true,
-      serverErrors: []
-    });
-
+  authenticate(model) {
     AuthenticationActions.authenticate(model);
   }
 
   render() {
-    let { username, password } = this.validation;
-    let {hideServerErrors} = this.props;
-    let errors = [];
-
-    if (!hideServerErrors) {
-      errors = this.state.serverErrors.map((error, index) => {
-        return <ServerError key={index} message={error}/>;
-      });
-    }
-
-    let submitButtonText = this.state.isSubmitting ? "Carregando..." : "Entrar";
+    let {username, password} = this.validation;
 
     return (
-      <Formsy.Form
-        onValid={this.handleValid}
-        onInvalid={this.handleInvalid}
-        onValidSubmit={this.submitForm}>
+      <AppForm formId={this.formId} onFormSubmit={this.authenticate.bind(this) }>
         <div class="form-group">
           <AppText
             hintText="Email"
@@ -159,13 +93,7 @@ export default class AuthenticationForm extends React.Component {
             validationErrors={password.errors}
             validations={password.rules}/>
         </div>
-        <div class="form-group">
-          {errors}
-        </div>
-        <button type="submit" disabled={!this.state.canSubmit && !this.state.isSubmitting} class="button button-full button-primary">
-          {submitButtonText}
-        </button>
-      </Formsy.Form>
+      </AppForm>
     );
   }
 }

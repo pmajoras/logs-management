@@ -1,0 +1,126 @@
+"use strict";
+import React from "react";
+import FMUI from 'formsy-material-ui';
+import AppText from './AppText.jsx';
+import ServerError from './ServerError.jsx';
+import FormStore from '../../stores/common/FormStore';
+const store = FormStore;
+const storeEvents = FormStore.events;
+
+export default class AuthenticationForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleValid = this.handleValid.bind(this);
+    this.handleInvalid = this.handleInvalid.bind(this);
+    this.handleFormSubmission = this.handleFormSubmission.bind(this);
+    this.submitForm = this.submitForm.bind(this);
+
+    if (!this.props.formId) {
+      throw new Error("The formId is required");
+    }
+
+    this.state = {
+      canSubmit: true,
+      serverErrors: [],
+      isSubmitting: false,
+      formId: this.props.formId
+    };
+  }
+
+  componentWillMount() {
+    store.on(storeEvents.formSubmitted, this.handleFormSubmission);
+  }
+
+  componentWillUnmount() {
+    store.removeListener(storeEvents.formSubmitted, this.handleFormSubmission);
+  }
+
+  handleFormSubmission(err, formId) {
+
+    if (formId === this.state.formId) {
+      if (err) {
+        this.setServerErrors(err);
+      }
+      else {
+        this.setState({
+          isSubmitting: false,
+          serverErrors: []
+        });
+      }
+    }
+  }
+
+  setServerErrors(newServerErrors) {
+    let errors = [];
+    if (Array.isArray(newServerErrors)) {
+      errors = newServerErrors.map(error => error.message);
+    }
+    else {
+      errors.push("Ocorreu um erro durante a requisição, favor tentar novamente.");
+    }
+
+    this.setState({
+      serverErrors: errors,
+      isSubmitting: false
+    });
+  }
+
+  handleValid() {
+
+    if (!this.state.canSubmit) {
+      this.setState({
+        canSubmit: true
+      });
+    }
+  }
+
+  handleInvalid() {
+    if (this.state.canSubmit) {
+      this.setState({
+        canSubmit: false
+      });
+    }
+  }
+
+  submitForm(model) {
+    this.setState({
+      isSubmitting: true,
+      serverErrors: []
+    });
+
+    if (typeof this.props.onFormSubmit === 'function') {
+      this.props.onFormSubmit(model);
+    }
+  }
+
+  render() {
+    let {hideServerErrors, submitButtonMessage, isSubmittingMessage} = this.props;
+    let errors = [];
+
+    if (!hideServerErrors) {
+      errors = this.state.serverErrors.map((error, index) => {
+        return <ServerError key={index} message={error}/>;
+      });
+    }
+
+    submitButtonMessage = submitButtonMessage || "Salvar";
+    isSubmittingMessage = isSubmittingMessage || "Carregando...";
+
+    let submitButtonText = this.state.isSubmitting ? isSubmittingMessage : submitButtonMessage;
+
+    return (
+      <Formsy.Form
+        onValid={this.handleValid}
+        onInvalid={this.handleInvalid}
+        onValidSubmit={this.submitForm}>
+        {this.props.children}
+        <div class="form-group">
+          {errors}
+        </div>
+        <button type="submit" disabled={!this.state.canSubmit && !this.state.isSubmitting} class="button button-full button-primary">
+          {submitButtonText}
+        </button>
+      </Formsy.Form>
+    );
+  }
+}
