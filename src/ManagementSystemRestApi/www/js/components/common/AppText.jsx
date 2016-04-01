@@ -13,11 +13,16 @@ export default class AppText extends React.Component {
     super(props);
   }
 
+  focus() {
+    this.refs.formText.focus();
+  }
+
   render() {
     return (
       <FormsyText
         {...this.props}
         style={defaultStyle}
+        ref="formText"
         formNoValidate
         />
     );

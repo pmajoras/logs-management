@@ -3,9 +3,6 @@ import React from "react";
 import FMUI from 'formsy-material-ui';
 import AppText from './AppText.jsx';
 import ServerError from './ServerError.jsx';
-import FormStore from '../../stores/common/FormStore';
-const store = FormStore;
-const storeEvents = FormStore.events;
 
 export default class AuthenticationForm extends React.Component {
   constructor(props) {
@@ -15,38 +12,26 @@ export default class AuthenticationForm extends React.Component {
     this.handleFormSubmission = this.handleFormSubmission.bind(this);
     this.submitForm = this.submitForm.bind(this);
 
-    if (!this.props.formId) {
-      throw new Error("The formId is required");
-    }
-
     this.state = {
       canSubmit: true,
       serverErrors: [],
-      isSubmitting: false,
-      formId: this.props.formId
+      isSubmitting: false
     };
   }
 
-  componentWillMount() {
-    store.on(storeEvents.formSubmitted, this.handleFormSubmission);
-  }
+  handleFormSubmission(err) {
 
-  componentWillUnmount() {
-    store.removeListener(storeEvents.formSubmitted, this.handleFormSubmission);
-  }
-
-  handleFormSubmission(err, formId) {
-
-    if (formId === this.state.formId) {
-      if (err) {
-        this.setServerErrors(err);
-      }
-      else {
-        this.setState({
-          isSubmitting: false,
-          serverErrors: []
-        });
-      }
+    if (err) {
+      err = err.data || err;
+      this.setServerErrors(err);
+    }
+    else {
+      
+      this.resetForm();
+      this.setState({
+        isSubmitting: false,
+        serverErrors: []
+      });
     }
   }
 
@@ -93,6 +78,10 @@ export default class AuthenticationForm extends React.Component {
     }
   }
 
+  resetForm() {
+    this.refs.form.reset();
+  }
+
   render() {
     let {hideServerErrors, submitButtonMessage, isSubmittingMessage} = this.props;
     let errors = [];
@@ -110,6 +99,7 @@ export default class AuthenticationForm extends React.Component {
 
     return (
       <Formsy.Form
+        ref="form"
         onValid={this.handleValid}
         onInvalid={this.handleInvalid}
         onValidSubmit={this.submitForm}>

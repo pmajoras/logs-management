@@ -37,17 +37,18 @@ class AuthenticationStore extends BaseStore {
       payload.isAuthenticated = false;
     }
 
-    this.emit(this.events.authenticationSubmitted, err, payload);
     if (this.state.isAuthenticated !== payload.isAuthenticated) {
       this.setState(payload);
       this.emit(this.events.authenticationChanged, null, this.state.isAuthenticated);
     }
+    this.emit(this.events.authenticationSubmitted, err, payload);
   }
 
   handleActions(action) {
     switch (action.type) {
       case authenticationActions.actions.authenticate: {
         this.handleAuthenticate(action.err, action.payload);
+        break;
       }
     }
   }

@@ -4,7 +4,7 @@ var BaseController = require('../base-controller');
 var mustAuthorizeWithId = require('../../middlewares/general-middlewares/must-authorize-with-id');
 var TodoService = require('../../application-services/todo-service');
 
-class TodoController extends BaseController {
+class BoardController extends BaseController {
   constructor() {
     super();
     this.todoService = new TodoService();
@@ -35,4 +35,4 @@ var routeFactory = new RouteFactory("/todo/:id/")
   .get("boards", "getBoards", mustAuthorizeWithId)
   .post("boards", "createBoard", mustAuthorizeWithId);
 
-module.exports = { "Controller": TodoController, "routeFactory": routeFactory };
+module.exports = { "Controller": BoardController, "routeFactory": routeFactory };

@@ -5,8 +5,6 @@ import AuthenticationActions from "../../actions/authentication/AuthenticationAc
 import AuthenticationStore from "../../stores/authentication/AuthenticationStore";
 import { browserHistory } from 'react-router';
 import AppForm from '../../components/common/AppForm.jsx';
-import FormActions from '../../actions/common/FormActions';
-import moment from 'moment';
 
 const store = AuthenticationStore;
 const storeEvents = AuthenticationStore.events;
@@ -15,7 +13,6 @@ export default class AuthenticationForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleAuthenticationSubmit = this.handleAuthenticationSubmit.bind(this);
-    this.formId = moment().format("YYYY:MM:DD:HH:mm:ss.ms");
 
     this.validation = {
       username: {
@@ -52,6 +49,7 @@ export default class AuthenticationForm extends React.Component {
   }
 
   handleAuthenticationSubmit(err, data) {
+    this.refs.authForm.handleFormSubmission(err);
 
     if (!err) {
       if (this.props.onAuthenticationSuccess && typeof this.props.onAuthenticationSuccess == 'function') {
@@ -61,7 +59,6 @@ export default class AuthenticationForm extends React.Component {
         browserHistory.push("welcome");
       }
     }
-    FormActions.handleFormSubmission(err.data || err, this.formId);
   }
 
   authenticate(model) {
@@ -72,7 +69,7 @@ export default class AuthenticationForm extends React.Component {
     let {username, password} = this.validation;
 
     return (
-      <AppForm formId={this.formId} onFormSubmit={this.authenticate.bind(this) }>
+      <AppForm ref="authForm" onFormSubmit={this.authenticate.bind(this) }>
         <div class="form-group">
           <AppText
             hintText="Email"

@@ -7,6 +7,7 @@ export default class Nav extends React.Component {
   constructor() {
     super();
     let authenticationService = new AuthenticationService();
+    this.handleAuthenticationChange = this.handleAuthenticationChange.bind(this);
 
     this.state = {
       collapsed: true,
@@ -15,14 +16,15 @@ export default class Nav extends React.Component {
   }
 
   componentWillMount() {
-    AuthenticationStore.on(AuthenticationStore.events.authenticationChanged, this.handleAuthenticationChange.bind(this));
+    AuthenticationStore.on(AuthenticationStore.events.authenticationChanged, this.handleAuthenticationChange);
   }
 
   componentWillUnmount() {
-    AuthenticationStore.removeListener(AuthenticationStore.events.authenticationChanged, this.handleAuthenticationChange.bind(this));
+    AuthenticationStore.removeListener(AuthenticationStore.events.authenticationChanged, this.handleAuthenticationChange);
   }
 
   handleAuthenticationChange(err, isAuthenticated) {
+
     if (!err) {
       this.setState({ isAuthenticated: isAuthenticated });
     }

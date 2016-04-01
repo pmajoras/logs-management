@@ -5,6 +5,7 @@ import TodoActions from "../../actions/todo/TodoActions";
 import TodoStore from "../../stores/todo/TodoStore";
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import CreateBoard from './boards/CreateBoard.jsx';
+import BoardsContainer from './boards/BoardsContainer.jsx';
 const store = TodoStore;
 const storeEvents = TodoStore.events;
 
@@ -47,10 +48,11 @@ export default class Boards extends React.Component {
   getFilteredBoards() {
     let filter = this.state.filter || "";
     if (filter.length > 0) {
-      return this.state.boards.filter((board) => board.name.toUpperCase() === filter).map((board) => <p>board.name</p>);
+
+      return this.state.boards.filter((board) => board.name.toUpperCase().indexOf(filter.toUpperCase()) > -1).map((board) => board);
     }
     else {
-      return this.state.boards.map((board) => <p>board.name</p>);
+      return this.state.boards;
     }
   }
 
@@ -62,6 +64,10 @@ export default class Boards extends React.Component {
     this.setState({
       filter: value
     });
+  }
+
+  onBoardCreated() {
+    this.refs.createBoardPopover.hide();
   }
 
   render() {
@@ -79,7 +85,12 @@ export default class Boards extends React.Component {
                 Boards
               </div>
               <div class="col-xs-4 col-md-4">
-                <OverlayTrigger trigger="focus" placement="bottom" overlay={<Popover id="createBoardPopover" title="Criar Quadro"><CreateBoard/></Popover>}>
+                <OverlayTrigger ref="createBoardPopover" trigger="click" placement="bottom"
+                  overlay={
+                    <Popover id="createBoardPopover" title="Criar Quadro">
+                      <CreateBoard onSuccess={this.onBoardCreated.bind(this) }/>
+                    </Popover>
+                  }>
                   <button class="button button-raised button-action button-circle pull-right">
                     <i class="fa fa-plus fa-1x"></i>
                   </button>
@@ -89,7 +100,7 @@ export default class Boards extends React.Component {
           </div>
         </div>
         <SearchContainer onChange={this.handleFilterChange.bind(this) } initialText={this.state.filter} onSearch={this.search.bind(this) }/>
-        {boards}
+        <BoardsContainer boards={boards}/>
       </div>
     );
   }
