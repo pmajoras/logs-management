@@ -2,11 +2,11 @@
 import React from "react";
 import AppForm from "../../../components/common/AppForm.jsx";
 import AppText from "../../../components/common/AppText.jsx";
-import TodoStore from "../../../stores/todo/TodoStore";
-import TodoActions from "../../../actions/todo/TodoActions";
+import BoardStore from "../../../stores/todo/BoardStore";
+import BoardActions from "../../../actions/todo/BoardActions";
 
-const store = TodoStore;
-const storeEvents = TodoStore.events;
+const store = BoardStore;
+const storeEvents = BoardStore.events;
 
 export default class CreateBoard extends React.Component {
 
@@ -48,7 +48,7 @@ export default class CreateBoard extends React.Component {
   }
 
   createBoard(model) {
-    TodoActions.createBoard(model);
+    BoardActions.createBoard(model);
   }
 
   render() {

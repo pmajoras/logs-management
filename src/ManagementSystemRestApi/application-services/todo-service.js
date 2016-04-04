@@ -54,6 +54,33 @@ class TodoService {
 
     return deferred.promise;
   }
+
+  /**
+  * @param {Object} boardId - The board id.
+  * @param {String} boardName - The board name.
+  * @param {String} boardDescription - The board description.
+  * @returns {Promise}
+  */
+  updateBoard(boardId, boardName, boardDescription) {
+    let deferred = Q.defer();
+    let userMustExistWithIdSpec = new UserMustExistWithIdSpec(this._userService);
+    let saveBoard = (boardToUpdate) => {
+      boardToUpdate.name = boardName;
+      boardToUpdate.description = boardDescription;
+      return this._boardService.save(boardToUpdate);
+    };
+
+    this._boardService.findById(boardId)
+      .then(saveBoard)
+      .then((updatedBoard) => {
+        deferred.resolve(updatedBoard);
+      })
+      .catch((err) => {
+        deferred.reject(err);
+      });
+
+    return deferred.promise;
+  }
 }
 
 module.exports = TodoService;

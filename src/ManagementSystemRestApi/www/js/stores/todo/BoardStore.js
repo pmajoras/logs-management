@@ -7,7 +7,7 @@ const events = {
   boardCreated: "EV_BOARD_CREATED"
 };
 
-class TodoStore extends BaseStore {
+class BoardStore extends BaseStore {
   constructor() {
     super({ boards: [] }, events);
   }
@@ -48,7 +48,7 @@ class TodoStore extends BaseStore {
   }
 }
 
-const todoStore = new TodoStore;
-dispatcher.register(todoStore.handleActions.bind(todoStore));
+const boardStore = new BoardStore;
+dispatcher.register(boardStore.handleActions.bind(boardStore));
 
-export default todoStore;
+export default boardStore;

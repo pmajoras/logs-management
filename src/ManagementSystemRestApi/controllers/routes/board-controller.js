@@ -29,10 +29,15 @@ class BoardController extends BaseController {
         next(err);
       });
   }
+
+  updateBoard(req, res, next) {
+    next(new Error("Not implemented"));
+  }
 }
 
 var routeFactory = new RouteFactory("/todo/:id/")
   .get("boards", "getBoards", mustAuthorizeWithId)
-  .post("boards", "createBoard", mustAuthorizeWithId);
+  .post("boards", "createBoard", mustAuthorizeWithId)
+  .post("boards/:boardId", "updateBoard", mustAuthorizeWithId);
 
 module.exports = { "Controller": BoardController, "routeFactory": routeFactory };

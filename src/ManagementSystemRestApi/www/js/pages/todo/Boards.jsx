@@ -1,13 +1,13 @@
 "use strict";
 import React from "react";
 import SearchContainer from "../../components/common/SearchContainer.jsx";
-import TodoActions from "../../actions/todo/TodoActions";
-import TodoStore from "../../stores/todo/TodoStore";
+import BoardActions from "../../actions/todo/BoardActions";
+import BoardStore from "../../stores/todo/BoardStore";
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import CreateBoard from './boards/CreateBoard.jsx';
 import BoardsContainer from './boards/BoardsContainer.jsx';
-const store = TodoStore;
-const storeEvents = TodoStore.events;
+const store = BoardStore;
+const storeEvents = BoardStore.events;
 
 export default class Boards extends React.Component {
 
@@ -30,7 +30,7 @@ export default class Boards extends React.Component {
   }
 
   componentDidMount() {
-    TodoActions.getBoards();
+    BoardActions.getBoards();
   }
 
   handleBoardsLoaded(err, boards) {
@@ -57,7 +57,7 @@ export default class Boards extends React.Component {
   }
 
   search() {
-    TodoActions.getBoards();
+    BoardActions.getBoards();
   }
 
   handleFilterChange(value) {
