@@ -18,8 +18,8 @@ import config from './config/config';
 //Check this repo:
 //https://github.com/zilverline/react-tap-event-plugin
 injectTapEventPlugin();
+require('./jquery-rest.js');
 
-require('./jquery.rest.js');
 config.start();
 const app = document.getElementById('app');
 
