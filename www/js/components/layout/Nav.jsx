@@ -1,9 +1,12 @@
 "use strict";
 import React from "react";
 import { IndexLink, Link } from "react-router";
+import { MenuItem, Navbar, Nav, NavItem, NavDropdown } from 'react-bootstrap';
 import AuthenticationStore from "../../stores/authentication/AuthenticationStore";
 import AuthenticationService from "../../services/authentication/AuthenticationService";
-export default class Nav extends React.Component {
+import LoginNavButton from "./LoginNavButton.jsx";
+
+export default class AppNav extends React.Component {
   constructor() {
     super();
     let authenticationService = new AuthenticationService();
@@ -47,23 +50,20 @@ export default class Nav extends React.Component {
     const isAuthenticated = this.state.isAuthenticated;
 
     let mustBeAuthenticatedLinks = [
-      <li key="1" class={welcomeClass}>
-        <Link to="welcome" onClick={this.toggleCollapse.bind(this) }>Início</Link>
+      <li key={1} class={welcomeClass}>
+        <Link to="welcome">Início</Link>
       </li>,
-      <li key="2" class={todoClass}>
-        <Link to="todo/boards" onClick={this.toggleCollapse.bind(this) }>Todos</Link>
+      <li key={2} class={todoClass}>
+        <Link to="todo/boards">Todos</Link>
       </li>,
-      <li key="3" class={settingsClass}>
-        <Link to="settings" onClick={this.toggleCollapse.bind(this) }>Settings</Link>
+      <li key={3} class={settingsClass}>
+        <Link to="settings">Settings</Link>
       </li>
     ];
 
     let mustNotBeAuthenticatedLinks = [
-      <li key="4" class={featuredClass}>
-        <IndexLink to="/" onClick={this.toggleCollapse.bind(this) }>Todos</IndexLink>
-      </li>,
-      <li key="5" class={loginClass}>
-        <Link to="authentication" onClick={this.toggleCollapse.bind(this) }>Login</Link>
+      <li key={4} class={featuredClass}>
+        <IndexLink to="/">Todos</IndexLink>
       </li>
     ];
 
@@ -76,23 +76,22 @@ export default class Nav extends React.Component {
     }
 
     return (
-      <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" onClick={this.toggleCollapse.bind(this) } >
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
-          <div class={"navbar-collapse " + navClass} id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-              {linksThatAllCanUse}
-            </ul>
-          </div>
-        </div>
-      </nav>
+        <Navbar inverse>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <a href="javascript:;">TodoApp</a>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+            <Nav>
+             {linksThatAllCanUse}
+            </Nav>
+            <Nav pullRight>
+              <LoginNavButton isAuthenticated={isAuthenticated}/>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
     );
   }
 }

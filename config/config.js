@@ -40,7 +40,7 @@ else {
 
     },
     db: {
-      connectionString: process.env.PGPDB || 'mongodb://pgp-heroku:heroku@ds015730.mlab.com:15730/heroku_2xlkxmc0'
+      connectionString: process.env.PGPDB || 'mongodb://localhost:27017/ManagementSystem'
     }
   };
 }
