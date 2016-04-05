@@ -1,7 +1,7 @@
 "use strict";
 import dispatcher from "../../dispatcher";
 const BaseStore = require('../BaseStore');
-const todoActions = require("../../actions/todo/TodoActions");
+const boardActions = require("../../actions/todo/BoardActions");
 const events = {
   boardsLoaded: "EV_BOARDS_LOADED",
   boardCreated: "EV_BOARD_CREATED"
@@ -36,11 +36,11 @@ class BoardStore extends BaseStore {
   handleActions(action) {
 
     switch (action.type) {
-      case todoActions.actions.getBoards: {
+      case boardActions.actions.getBoards: {
         this.handleGetBoards(action.err, action.payload);
         break;
       }
-      case todoActions.actions.createBoard: {
+      case boardActions.actions.createBoard: {
         this.handleCreateBoard(action.err, action.payload);
         break;
       }

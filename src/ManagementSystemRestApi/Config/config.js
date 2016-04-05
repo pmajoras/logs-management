@@ -2,18 +2,33 @@
 
 var config = {};
 
-// JWT secret configuration
-config.secret = "testSecret";
+if (process.env.PGPENV == 'PROD') {
+  config = {
+    secret: "testSecret",
+    web: {
+      port: process.env.PGPPORT || 8085
+    },
+    logs: {
 
-// Web Configurations
-config.web = {};
-config.web.port = process.env.PORT || 8085;
+    },
+    db: {
+      connectionString: process.env.PGPDB || 'mongodb://localhost/ManagementSystem'
+    }
+  };
+}
+else {
+  config = {
+    secret: "testSecret",
+    web: {
+      port: process.env.PGPPORT || 8085
+    },
+    logs: {
 
-// Log
-config.logs = {};
-
-// Database Configurations
-config.db = {};
-config.db.connectionString = 'mongodb://localhost/ManagementSystem';
+    },
+    db: {
+      connectionString: process.env.PGPDB || 'mongodb://localhost/ManagementSystem'
+    }
+  };
+}
 
 module.exports = config;
