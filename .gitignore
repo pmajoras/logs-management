@@ -30,6 +30,4 @@ node_modules
 bower_components
 
 # ignore contents of folders
-src/ManagementSystemClientApp/typings/
-src/ManagementSystemRestApi/typings/
-src/ManagementSystemClientApp/dist/
+src/typings/
