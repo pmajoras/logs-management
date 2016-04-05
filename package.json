@@ -43,11 +43,17 @@
         "validator": "^5.1.0",
         "webpack": "^1.12.14",
         "webpack-dev-server": "^1.14.1",
-        "winston": "^2.2.0"
+        "winston": "^2.2.0",
+        "gulp": "^3.9.1",
+        "gulp-jshint": "^2.0.0",
+        "jshint": "^2.9.1",
+        "mockgoose": "^5.2.4"
     },
     "scripts": {
         "dev-web": "webpack-dev-server --content-base www --inline --hot",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "node index.js",
+        "test": "mocha tests/top",
+        "postinstall": "bower install && gulp build && webpack",
     },
     "repository": {
         "type": "git",
@@ -59,12 +65,7 @@
     ],
     "author": "Paulo Gabriel Souza Poffal",
     "license": "MIT",
-    "devDependencies": {
-        "gulp": "^3.9.1",
-        "gulp-jshint": "^2.0.0",
-        "jshint": "^2.9.1",
-        "mockgoose": "^5.2.4"
-    },
+    "devDependencies": {},
     "engines": {
         "node": "5.4.x"
     }
