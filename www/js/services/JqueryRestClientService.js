@@ -2,7 +2,7 @@
 var $ = require('jquery');
 var config = require('../../../config/config');
 
-var client = new $.RestClient('http://localhost:8085/api/', {
+var client = new $.RestClient('https://pgp-todo-app.herokuapp.com/api/', {
   verbs: {
     'post': 'POST',
     'read': 'GET',

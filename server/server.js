@@ -22,7 +22,6 @@ exports.start = () => {
   app.use(bodyParser.json());
   // use morgan to log requests to the console
   app.use(morgan('dev'));
-  app.disable('etag');
   app.use(cors());
 
   // middlewares setup
