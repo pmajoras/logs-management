@@ -68,7 +68,7 @@
   "author": "Paulo Gabriel Souza Poffal",
   "license": "MIT",
   "devDependencies": {
-    "bower": "^1.7.7"
+    
   },
   "engines": {
     "node": "5.4.x"
