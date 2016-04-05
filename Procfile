@@ -1,1 +1,1 @@
-web: node src/ManagementSystemRestApi/index.js
+web: node index.js
