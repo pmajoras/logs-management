@@ -52,7 +52,7 @@ exports.start = () => {
   // middlewares errors setup
   middlewares.setupErrorHandlers(app);
 
-  let port = config.web.port || 8085;
+  let port = process.env.PORT || config.web.port;
   app.listen(port);
   console.log("Express server listening on port %d in %s mode", port, app.settings.env);
 };
