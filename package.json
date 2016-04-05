@@ -55,7 +55,7 @@
     "dev-web": "webpack-dev-server --content-base www --inline --hot",
     "start": "node index.js",
     "test": "mocha tests/top",
-    "postinstall": "bower install gulp build && webpack"
+    "postinstall": "bower install && gulp build && webpack"
   },
   "repository": {
     "type": "git",
