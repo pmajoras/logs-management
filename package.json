@@ -20,16 +20,20 @@
         "flux": "^2.1.1",
         "formsy-material-ui": "^0.3.8",
         "formsy-react": "^0.17.0",
+        "gulp": "^3.9.1",
         "gulp-autoprefixer": "^3.1.0",
         "gulp-eslint": "^2.0.0",
+        "gulp-jshint": "^2.0.0",
         "gulp-sass": "^2.2.0",
         "imports-loader": "^0.6.5",
         "iz": "^0.7.1",
         "jquery": "^2.2.2",
+        "jshint": "^2.9.1",
         "jsonwebtoken": "^5.5.4",
         "lazypipe": "^1.0.1",
         "localforage": "^1.4.0",
         "material-ui": "^0.14.4",
+        "mockgoose": "^5.2.4",
         "moment": "^2.12.0",
         "mongoose": "~3.6.13",
         "morgan": "^1.6.1",
@@ -43,11 +47,7 @@
         "validator": "^5.1.0",
         "webpack": "^1.12.14",
         "webpack-dev-server": "^1.14.1",
-        "winston": "^2.2.0",
-        "gulp": "^3.9.1",
-        "gulp-jshint": "^2.0.0",
-        "jshint": "^2.9.1",
-        "mockgoose": "^5.2.4"
+        "winston": "^2.2.0"
     },
     "scripts": {
         "dev-web": "webpack-dev-server --content-base www --inline --hot",
@@ -65,7 +65,9 @@
     ],
     "author": "Paulo Gabriel Souza Poffal",
     "license": "MIT",
-    "devDependencies": {},
+    "devDependencies": {
+        "bower": "^1.7.7"
+    },
     "engines": {
         "node": "5.4.x"
     }
