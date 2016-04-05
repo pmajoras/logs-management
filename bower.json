@@ -6,7 +6,8 @@
     "localforage": "^1.4.0",
     "Buttons": "^2.0.0",
     "jquery.rest": "jquery.rest#^1.0.2",
-    "font-awesome": "^4.5.0"
+    "font-awesome": "^4.5.0",
+    "jpillora/jquery.rest": "jquery.rest#^1.0.2"
   },
   "appPath": "www",
   "moduleName": "logs-management-system-app",
