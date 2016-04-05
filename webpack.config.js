@@ -7,7 +7,7 @@ module.exports = {
   devtool: debug ? "inline-sourcemap" : null,
   entry: [
     "./bower_components/Buttons/js/buttons.js",
-    "./www/js/jquery.rest.js",
+    "./www/js/jquery-rest.js",
     "./www/js/client.js"],
   module: {
     loaders: [
