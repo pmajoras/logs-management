@@ -32,6 +32,27 @@ class AuthenticationService extends BaseService {
     return deferred.promise;
   }
 
+  register(userViewModel) {
+    if (!userViewModel || !userViewModel.username || !userViewModel.password) {
+      return Q.reject(appErrors("O nome de usuário e a senha são obrigatórios."));
+    }
+
+    let deferred = Q.defer();
+
+    this.handleApiPromise(client.register.post(userViewModel))
+      .then((data) => {
+
+        storageService.setItem("AUTH_TOKEN", data.token);
+        storageService.setItem("AUTH_EXPIRES", data.expiresAt);
+        storageService.setItem("AUTH_USER_ID", data.id);
+        deferred.resolve(data);
+      }, (err) => {
+        deferred.reject(err);
+      });
+
+    return deferred.promise;
+  }
+
   getAuthToken() {
     return this.isAuthenticated() ? storageService.getItem("AUTH_TOKEN") : null;
   }

@@ -4,7 +4,8 @@ const dispatcher = require("../../dispatcher").default;
 const authenticationActions = require("../../actions/authentication/AuthenticationActions");
 const events = {
   authenticationSubmitted: "EV_AUTHENTICATION_SUBMITTED",
-  authenticationChanged: "EV_AUTHENTICATION_CHANGED"
+  authenticationChanged: "EV_AUTHENTICATION_CHANGED",
+  registerSubmitted: "EV_REGISTRATION_SUBMITTED"
 };
 
 class AuthenticationStore extends BaseStore {
@@ -26,6 +27,22 @@ class AuthenticationStore extends BaseStore {
       token: newState.token,
       id: newState.id
     });
+  }
+
+  registerSubmitted(err, payload) {
+    payload = payload || {};
+    if (!err) {
+      payload.isAuthenticated = true;
+    }
+    else {
+      payload.isAuthenticated = false;
+    }
+
+    if (this.state.isAuthenticated !== payload.isAuthenticated) {
+      this.setState(payload);
+      this.emit(this.events.authenticationChanged, null, this.state.isAuthenticated);
+    }
+    this.emit(this.events.registerSubmitted, err, payload);
   }
 
   handleAuthenticate(err, payload) {
@@ -50,8 +67,13 @@ class AuthenticationStore extends BaseStore {
         this.handleAuthenticate(action.err, action.payload);
         break;
       }
+      case authenticationActions.actions.register: {
+        this.registerSubmitted(action.err, action.payload);
+        break;
+      }
     }
   }
+
 }
 
 const authenticationStore = new AuthenticationStore();
