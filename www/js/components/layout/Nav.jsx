@@ -45,7 +45,6 @@ export default class AppNav extends React.Component {
     const welcomeClass = location.pathname.match(/^\/welcome/) ? "active" : "";
     const todoClass = location.pathname.match(/^\/todo/) ? "active" : "";
     const settingsClass = location.pathname.match(/^\/settings/) ? "active" : "";
-    const loginClass = location.pathname.match(/^\/authentication/) ? "active" : "";
     const navClass = collapsed ? "collapse" : "";
     const isAuthenticated = this.state.isAuthenticated;
 

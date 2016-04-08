@@ -10,6 +10,7 @@ import Boards from "./pages/todo/Boards.jsx";
 import Layout from "./pages/Layout.jsx";
 import Settings from "./pages/Settings.jsx";
 import Authentication from "./pages/authentication/Authentication.jsx";
+import Register from "./pages/authentication/Register.jsx";
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import config from './config/config';
 
@@ -37,6 +38,7 @@ ReactDOM.render(
       </Route>
       <Route path="settings" component={Settings}></Route>
       <Route path="authentication" component={Authentication}></Route>
+      <Route path="register" component={Register}></Route>
     </Route>
   </Router>,
   app);

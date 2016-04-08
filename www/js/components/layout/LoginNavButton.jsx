@@ -18,7 +18,10 @@ export default class AppNav extends React.Component {
         <li>
           <Link to="authentication">Login</Link>
         </li>);
-      menuItems.push(<MenuItem>Registrar</MenuItem>);
+      menuItems.push(
+        <li>
+          <Link to="register">Registrar</Link>
+        </li>);
     }
     else{
       menuItems.push(<MenuItem>Logoff</MenuItem>);
