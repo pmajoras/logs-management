@@ -1,7 +1,7 @@
 "use strict";
 var UserService = require('../domain/services/users/user-service');
 var BoardService = require('../domain/services/boards/board-service');
-var UserMustExistWithIdSpec = require('./specifications/user-must-exist-with-id-spec');
+var EntityWithIdMustExistSpec = require('./specifications/entity-with-id-must-exist-spec');
 var Q = require("q");
 
 class TodoService {
@@ -35,7 +35,7 @@ class TodoService {
   */
   createBoard(userId, boardName, boardDescription) {
     let deferred = Q.defer();
-    let userMustExistWithIdSpec = new UserMustExistWithIdSpec(this._userService);
+    let entityWithIdMustExistSpec = new EntityWithIdMustExistSpec(this._userService);
     let foundUser = null;
 
     let saveBoard = (user) => {
@@ -43,7 +43,7 @@ class TodoService {
       return this._boardService.save({ name: boardName, description: boardDescription, owner: foundUser._id });
     };
 
-    userMustExistWithIdSpec.isSatisfiedBy(userId)
+    entityWithIdMustExistSpec.isSatisfiedBy(userId)
       .then(saveBoard)
       .then((newBoard) => {
         deferred.resolve(newBoard);
@@ -63,14 +63,14 @@ class TodoService {
   */
   updateBoard(boardId, boardName, boardDescription) {
     let deferred = Q.defer();
-    let userMustExistWithIdSpec = new UserMustExistWithIdSpec(this._userService);
+    let entityWithIdMustExistSpec = new EntityWithIdMustExistSpec(this._boardService);
     let saveBoard = (boardToUpdate) => {
       boardToUpdate.name = boardName;
       boardToUpdate.description = boardDescription;
       return this._boardService.save(boardToUpdate);
     };
 
-    this._boardService.findById(boardId)
+    entityWithIdMustExistSpec.isSatisfiedBy(boardId)
       .then(saveBoard)
       .then((updatedBoard) => {
         deferred.resolve(updatedBoard);

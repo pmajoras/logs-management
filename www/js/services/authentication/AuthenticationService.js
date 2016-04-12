@@ -53,6 +53,12 @@ class AuthenticationService extends BaseService {
     return deferred.promise;
   }
 
+  logoff() {
+    storageService.removeItem("AUTH_TOKEN");
+    storageService.removeItem("AUTH_EXPIRES");
+    storageService.removeItem("AUTH_USER_ID");
+  }
+
   getAuthToken() {
     return this.isAuthenticated() ? storageService.getItem("AUTH_TOKEN") : null;
   }

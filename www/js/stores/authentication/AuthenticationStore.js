@@ -10,6 +10,7 @@ const events = {
 
 class AuthenticationStore extends BaseStore {
   constructor() {
+
     super({
       isAuthenticated: false,
       username: '',
@@ -22,10 +23,10 @@ class AuthenticationStore extends BaseStore {
     newState = newState || {};
 
     super.setState({
-      isAuthenticated: newState.isAuthenticated,
-      username: newState.username,
-      token: newState.token,
-      id: newState.id
+      isAuthenticated: newState.isAuthenticated || false,
+      username: newState.username || '',
+      token: newState.token || '',
+      id: newState.id || ''
     });
   }
 
@@ -61,6 +62,11 @@ class AuthenticationStore extends BaseStore {
     this.emit(this.events.authenticationSubmitted, err, payload);
   }
 
+  handleLogoff(err, payload) {
+    this.setState(null);
+    this.emit(this.events.authenticationChanged, null, false);
+  }
+
   handleActions(action) {
     switch (action.type) {
       case authenticationActions.actions.authenticate: {
@@ -69,6 +75,10 @@ class AuthenticationStore extends BaseStore {
       }
       case authenticationActions.actions.register: {
         this.registerSubmitted(action.err, action.payload);
+        break;
+      }
+      case authenticationActions.actions.logoff: {
+        this.handleLogoff(action.err, action.payload);
         break;
       }
     }

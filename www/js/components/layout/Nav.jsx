@@ -27,7 +27,7 @@ export default class AppNav extends React.Component {
   }
 
   handleAuthenticationChange(err, isAuthenticated) {
-
+    console.log("isAuth", isAuthenticated);
     if (!err) {
       this.setState({ isAuthenticated: isAuthenticated });
     }
@@ -50,13 +50,13 @@ export default class AppNav extends React.Component {
 
     let mustBeAuthenticatedLinks = [
       <li key={1} class={welcomeClass}>
-        <Link to="welcome">Início</Link>
+        <Link to="/welcome">Início</Link>
       </li>,
       <li key={2} class={todoClass}>
-        <Link to="todo/boards">Todos</Link>
+        <Link to="/todo/boards">Todos</Link>
       </li>,
       <li key={3} class={settingsClass}>
-        <Link to="settings">Settings</Link>
+        <Link to="/settings">Settings</Link>
       </li>
     ];
 
@@ -75,22 +75,22 @@ export default class AppNav extends React.Component {
     }
 
     return (
-        <Navbar inverse>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <a href="javascript:;">TodoApp</a>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav>
-             {linksThatAllCanUse}
-            </Nav>
-            <Nav pullRight>
-              <LoginNavButton isAuthenticated={isAuthenticated}/>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
+      <Navbar inverse>
+        <Navbar.Header>
+          <Navbar.Brand>
+            <a href="javascript:;">TodoApp</a>
+          </Navbar.Brand>
+          <Navbar.Toggle />
+        </Navbar.Header>
+        <Navbar.Collapse>
+          <Nav>
+            {linksThatAllCanUse}
+          </Nav>
+          <Nav pullRight>
+            <LoginNavButton isAuthenticated={isAuthenticated}/>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
     );
   }
 }

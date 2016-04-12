@@ -32,13 +32,13 @@ ReactDOM.render(
   <Router history={browserHistory}>
     <Route path="/" component={Layout}>
       <IndexRoute component={Welcome}></IndexRoute>
-      <Route path="welcome" component={Welcome}></Route>
-      <Route path="todo" component={Todo}>
-        <Route path="boards" component={Boards}></Route>
-      </Route>
+      <Route name="welcome" path="welcome" component={Welcome}></Route>
       <Route path="settings" component={Settings}></Route>
       <Route path="authentication" component={Authentication}></Route>
       <Route path="register" component={Register}></Route>
+      <Route path="todo" component={Todo}>
+        <Route path="boards" component={Boards}></Route>
+      </Route>
     </Route>
   </Router>,
   app);

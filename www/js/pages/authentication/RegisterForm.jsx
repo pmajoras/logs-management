@@ -70,7 +70,7 @@ export default class RegisterForm extends React.Component {
         this.props.onAuthenticationSuccess(data);
       }
       else {
-        browserHistory.push("welcome");
+        browserHistory.push("/welcome");
       }
     }
   }
